@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "prisma migrate dev --name init && node prisma/seed.js",
-    "postinstall": "pnpm install --no-frozen-lockfile"
+    "migrate": "prisma migrate dev --name init && node prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
