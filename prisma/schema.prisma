@@ -1,0 +1,109 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String   @unique
+  password     String
+  isAdmin      Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  isAvailable  Boolean  @default(false)
+  profileImage String?
+  roleId       Int?
+  genreId      Int?
+  budget       String?
+  provinceId   Int?
+  districtId   Int?
+  contact      String?
+  description  String?
+  createdAt    DateTime @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @db.Timestamp(0)
+
+  province ProvinceList? @relation(fields: [provinceId], references: [id])
+  district DistrictList? @relation(fields: [districtId], references: [id])
+  role     RoleList?     @relation(fields: [roleId], references: [id])
+  genre    GenreList?    @relation(fields: [genreId], references: [id])
+
+  sentReviews     Review[] @relation("sentReviews")
+  receivedReviews Review[] @relation("receivedReviews")
+  sentReports     Report[] @relation("sentReports")
+  receivedReports Report[] @relation("receivedReports")
+
+  @@index([provinceId])
+  @@index([districtId])
+  @@index([roleId])
+  @@index([genreId])
+}
+
+model ProvinceList {
+  id           Int            @id @default(autoincrement())
+  province     String
+  user         User[]
+  districtList DistrictList[]
+}
+
+model DistrictList {
+  id         Int          @id @default(autoincrement())
+  provinceId Int
+  district   String
+  user       User[]
+  province   ProvinceList @relation(fields: [provinceId], references: [id])
+}
+
+model RoleList {
+  id   Int    @id @default(autoincrement())
+  role String
+  user User[]
+}
+
+model GenreList {
+  id    Int    @id @default(autoincrement())
+  genre String
+  user  User[]
+}
+
+model Review {
+  id         Int       @id @default(autoincrement())
+  senderId   Int
+  receiverId Int
+  content    String
+  score      Int
+  createdAt  DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt  DateTime  @updatedAt @db.Timestamp(0)
+  deletedAt  DateTime?
+
+  senderReview   User @relation(name: "sentReviews", fields: [senderId], references: [id])
+  receiverReview User @relation(name: "receivedReviews", fields: [receiverId], references: [id])
+
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model Report {
+  id         Int      @id @default(autoincrement())
+  senderId   Int
+  receiverId Int
+  complaint  String
+  createdAt  DateTime @default(now()) @db.Timestamp(0)
+
+  senderReport   User @relation(name: "sentReports", fields: [senderId], references: [id])
+  receiverReport User @relation(name: "receivedReports", fields: [receiverId], references: [id])
+
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model ViewCount {
+  id        Int      @id @default(autoincrement())
+  page      String
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
