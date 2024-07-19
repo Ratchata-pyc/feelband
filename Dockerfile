@@ -16,6 +16,9 @@ RUN pnpm install --frozen-lockfile
 # Copy local code to the container image.
 COPY . .
 
+# Generate Prisma client
+RUN npx prisma generate
+
 # Build the app
 RUN pnpm run build
 
