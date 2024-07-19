@@ -5,7 +5,7 @@ import logo from "../../public/assets/logo.png";
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col lg:flex-row items-center lg:items-stretch bg-white min-h-screen px-4 lg:px-0">
+    <div className="flex flex-col lg:flex-row items-center lg:items-stretch bg-white min-h-screen px-4 lg:px-0 ">
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-0 lg:flex lg:flex-col lg:justify-center">
         <Link href="/" legacyBehavior>
           <a className="w-full flex justify-center">
